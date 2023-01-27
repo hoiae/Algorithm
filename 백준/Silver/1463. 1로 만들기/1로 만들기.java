@@ -22,13 +22,13 @@ public class Main {
         for (int i = 4; i <= number; i++) {
             int cnt = Integer.MAX_VALUE;
             if (i % 2 == 0) {
-                cnt = result[i / 2] + 1;
+                cnt = result[i / 2] ;  //2로 나누어 떨어지는 경우
             }
             if (i % 3 == 0) {
-                cnt = Math.min(cnt, result[i / 3] + 1);
+                cnt = Math.min(cnt, result[i / 3]); //3으로 나누어 떨어지는 경우
             }
-            cnt = Math.min(cnt, result[i - 1] + 1);
-            result[i] = cnt;
+            cnt = Math.min(cnt, result[i - 1]); // -1을 하는 경우
+            result[i] = cnt + 1;
         }
 
         System.out.println(result[number]);
