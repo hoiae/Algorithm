@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,8 +19,6 @@ public class Main {
     }
     private static void makePrimeNumbers() {
         Arrays.fill(primeNumbers,true);
-        primeNumbers[0] = false;
-        primeNumbers[1] = false;
         for(int i = 2; i * i < MAX; i++){
             if(primeNumbers[i] == true){
                 for(int j = i * i; j < MAX; j = j + i){
@@ -30,8 +29,6 @@ public class Main {
     }
     private static void getTwoEvenNumber(int number) {
         for(int i = 3; i <= number; i += 2){
-//            int evenNumber = number - i;
-//            if(primeNumbers[evenNumber]){
             if(primeNumbers[i]&&primeNumbers[number-i]){
                 System.out.println(number+" = " + i + " + " + (number-i));
                 return;
