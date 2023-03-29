@@ -6,7 +6,7 @@ class Solution {
         Map<String,Integer> map = new HashMap<>();
         
         //clothes배열에 담긴 모든 값을 순차적으로 map에 담아야함
-        //옷의 종류를 key로 하여 개수를 value에 담음
+        //옷의 종류를 key로 두고, 각 종류별 개수를 value로 함
         for(int i = 0;  i < clothes.length; i++){
             String key = clothes[i][1];
             if(map.containsKey(key)){
@@ -22,8 +22,8 @@ class Solution {
         int multi = 1;
         for(Map.Entry<String,Integer> entry : map.entrySet()){
             System.out.println("key :" +entry.getKey() +" value : "+entry.getValue());
-            int currValue = entry.getValue();
-            multi *= currValue + 1;
+            int currValue = entry.getValue() + 1;
+            multi *= currValue;
         }
         
         
