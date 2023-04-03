@@ -1,0 +1,11 @@
+-- MCDP_CD가 CS거나 GS인 의사
+-- DR_NAME,DR_ID,MCDP_CD,HIRE_YMD 조회
+-- 고용일자 기준 내림차순정렬, 이름기순 오름차순정렬
+SELECT
+    DR_NAME,
+    DR_ID,
+    MCDP_CD,
+    TO_CHAR(HIRE_YMD, 'YYYY-MM-DD') AS HIRE_YMD
+  FROM DOCTOR
+  WHERE MCDP_CD = 'CS' OR MCDP_CD = 'GS'
+  ORDER BY HIRE_YMD DESC, DR_NAME ASC;
