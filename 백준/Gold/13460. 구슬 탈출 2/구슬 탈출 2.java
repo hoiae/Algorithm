@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -63,8 +62,8 @@ public class Main {
 
         while(!q.isEmpty()){
             Point nowPoint = q.poll();//현재 위치
-            if(nowPoint.depth >= 10) { //문제 : 만약, 10번 이하로 움직여서 빨간 구슬을 구멍을 통해 빼낼 수 없으면 -1을 출력한다
-                continue;
+            if(nowPoint.depth == 10) { //문제 : 만약, 10번 이하로 움직여서 빨간 구슬을 구멍을 통해 빼낼 수 없으면 -1을 출력한다
+                break;
             }
 //            System.out.println("===="+nowPoint.depth);
 
