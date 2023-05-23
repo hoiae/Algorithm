@@ -1,0 +1,11 @@
+-- 입양간 기록은 있는데, 보호소에 들어온 기록이 없는 동물의
+-- ANIMAL_OUTS에는 존재하고, ANIMAL_ID,이름을 
+-- id 순으로 조회
+SELECT 
+    B.ANIMAL_ID,
+    B.NAME
+  FROM ANIMAL_INS A
+  RIGHT JOIN ANIMAL_OUTS B
+  ON A.ANIMAL_ID = B.ANIMAL_ID
+  WHERE A.ANIMAL_ID IS NULL
+  ORDER BY B.ANIMAL_ID ASC;
