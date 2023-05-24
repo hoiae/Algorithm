@@ -1,4 +1,3 @@
-
 SELECT
     ANIMAL_ID,
     NAME
