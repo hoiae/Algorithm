@@ -16,6 +16,7 @@ class Solution {
     private static void dfs(int start,int k, int cnt, int depth, int[][] dungeons){
         if(depth == dungeons.length){
             max = Math.max(cnt,max);
+            return;
         }
         for(int i = 0; i < dungeons.length; i++){
             if(visited[i] == false){
