@@ -30,11 +30,13 @@ class Solution {
         int rootA = find(a);
         int rootB = find(b);
         
-        if(rootA < rootB){
-            parent[rootB] = rootA;
-        }else{
-            parent[rootA] = rootB;
-        }
+        parent[rootA] = rootB;
+        
+        // if(rootA < rootB){
+        //     parent[rootB] = rootA;
+        // }else{
+        //     parent[rootA] = rootB;
+        // }
         
     }
     
