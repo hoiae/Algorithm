@@ -1,0 +1,26 @@
+-- 코드를 입력하세요
+-- USED_GOODS_BOARD 테이블에서 WRITER_ID별로 그룹화함
+--  STATUS가 SALE인 가격들을 더함
+-- 합계가 70만원 이상인 유저의 아이디를 출력함.
+-- USER_ID와 WRITER_ID를 조인해서 원하는 값을 출력한다.
+
+WITH TEMP AS(
+    SELECT
+        WRITER_ID,
+        SUM(PRICE) TOTAL_SALES
+      FROM USED_GOODS_BOARD
+      WHERE STATUS = 'DONE'
+      GROUP BY WRITER_ID
+)
+
+SELECT
+    A.WRITER_ID,
+    B.NICKNAME,
+    A.TOTAL_SALES
+  FROM TEMP A
+  JOIN USED_GOODS_USER B
+  ON A.WRITER_ID = B.USER_ID
+  WHERE A.TOTAL_SALES >= 700000
+  ORDER BY TOTAL_SALES ASC;
+
+  
