@@ -1,0 +1,26 @@
+WITH TEMP AS(
+    SELECT
+        BOOK_ID,
+        SUM(SALES) TOTAL_SALES
+      FROM BOOK_SALES
+      WHERE TO_CHAR(SALES_DATE,'YYYY-MM') = '2022-01'
+      GROUP BY BOOK_ID
+    )
+
+SELECT 
+    CATEGORY,
+    SUM(TOTAL_SALES) TOTAL_SALES
+    FROM(
+        SELECT 
+            A.BOOK_ID,
+            A.CATEGORY,
+            B.TOTAL_SALES
+         FROM BOOK A
+         JOIN TEMP B
+         ON A.BOOK_ID = B.BOOK_ID
+    )
+    GROUP BY CATEGORY
+    ORDER BY CATEGORY ASC;
+
+    
+
