@@ -8,7 +8,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        //https://gre-eny.tistory.com/220
         int n = Integer.parseInt(br.readLine());
         long dp[][][] = new long[n + 1][10][1 << 10];//자리의 길이(N), 마지막숫자, 각 숫자의 사용여부
 
