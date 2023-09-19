@@ -1,0 +1,27 @@
+# #자동차 종류 CAR_TYPE = 세단, SUV, 승합차, 트럭, 리무진
+# #자동차 옵션 열선시트,스마트키,주차감지센터,네비게이션, 통풍시트, 열선,후방카메라,가죽시트
+
+# #CAR_TYPE = 세단 OR SUV
+# #START_DATE ~ END_DATE = 2022 11 01 ~ 2022 11 30 대여가능
+# #30일간 대여금액이 50 ~ 200미만
+
+# # 자동차 ID, 자동차 종류, 대여금액(FEE) 리스트를 출력하라
+# # 대여금액 기준 내림차순정렬, 자동차 종류 오름차순 정렬
+SELECT 
+    C.CAR_ID AS CAR_ID, 
+    C.CAR_TYPE AS CAR_TYPE,
+    TRUNCATE(C.DAILY_FEE * 30 *(100 - D.DISCOUNT_RATE) * 0.01 , 0) AS 'FEE'
+    FROM(
+        SELECT
+            *
+            FROM CAR_RENTAL_COMPANY_CAR
+            WHERE CAR_TYPE IN ("세단" , "SUV")
+        ) C
+    LEFT OUTER JOIN CAR_RENTAL_COMPANY_RENTAL_HISTORY H
+    ON C.CAR_ID = H.CAR_ID  
+    AND ('2022-11-01' BETWEEN H.START_DATE AND H.END_DATE OR '2022-11-30' BETWEEN H.START_DATE AND H.END_DATE)
+    JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN D ON C.CAR_TYPE = D.CAR_TYPE AND D.DURATION_TYPE = '30일 이상'
+    WHERE H.CAR_ID IS NULL
+    AND TRUNCATE(C.DAILY_FEE * 30 *(100 - D.DISCOUNT_RATE) * 0.01 , 0) >= 500000
+    AND TRUNCATE(C.DAILY_FEE * 30 *(100 - D.DISCOUNT_RATE) * 0.01 , 0) < 2000000
+    ORDER BY  FEE DESC, CAR_TYPE ASC, CAR_ID DESC;
