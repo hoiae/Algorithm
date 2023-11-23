@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,7 +44,10 @@ public class Main {
     private static void union(int a, int b) {
         int rootA = find(a);
         int rootB = find(b);
-
-        parents[rootA] = rootB;
+        if(rootA > rootB){
+            parents[rootB] = rootA;
+        }else{
+            parents[rootA] = rootB;          
+        }
     }
 }
