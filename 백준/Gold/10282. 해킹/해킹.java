@@ -54,6 +54,7 @@ public class Main {
 		
 		while(!pq.isEmpty()) {
 			Info now = pq.poll();
+			if(now.dist > dists[now.node]) continue;
 			for(Info next : map[now.node]) {
 				if(dists[next.node] > next.dist + dists[now.node]) {
 					dists[next.node] = next.dist + dists[now.node];
