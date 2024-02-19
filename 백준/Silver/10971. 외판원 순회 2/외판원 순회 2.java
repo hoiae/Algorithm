@@ -1,51 +1,47 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Arrays;
 
 public class Main {
-    static int n;
-    static int[][] arr;
-    static boolean[] visit;
+    static int N;
+    static int[][] map;
+    static boolean[]visited;
     static int min = Integer.MAX_VALUE;
+    static int startNode;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+        N = Integer.parseInt(br.readLine());
 
-        n = Integer.parseInt(br.readLine());
-        arr = new int[n][n];
-        visit = new boolean[n];
-
-        for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < n; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
-            }
+        map = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            map[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
         }
 
-        for (int i = 0; i < n; i++) {
-            visit[i] = true;
-            dfs(i, i, 0, 0);
+        visited = new boolean[N];
+        for(int i = 0; i  < N; i++) {
+            visited[i] = true;
+            startNode = i;
+            dfs(i, 0, 0);
+            visited[i] = false;
         }
-
         System.out.println(min);
     }
 
-    private static void dfs(int start, int now, int depth, int sum) {
-        if (depth == n - 1) {
-            if (arr[now][start] != 0) {
-                sum += arr[now][start];
-                min = Math.min(min, sum);
-            }
+    private static void dfs(int node , int depth, int cost) {
+        if (depth == N - 1) {
+            if(map[node][startNode] == 0) return;
+            min = Math.min(cost + map[node][startNode], min);
             return;
         }
-        for (int i = 0; i < n; i++) {
-            if (!visit[i] && arr[now][i] != 0) {
-                visit[i] = true;
-//                sum += arr[now][i];
-                dfs(start, i, depth + 1, sum + arr[now][i]);
-                visit[i] = false;
+
+        for (int i = 0; i < N; i++) {
+            if(map[node][i] != 0 && !visited[i]){
+                visited[i] = true;
+                dfs(i , depth + 1, cost + map[node][i]);
+                visited[i] = false;
             }
         }
     }
