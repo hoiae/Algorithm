@@ -1,62 +1,53 @@
 import java.io.*;
 import java.util.*;
 
-//백준2256번 - 줄세우기
 public class Main {
-    static int n,m;
-    static int[] arr;
-    static ArrayList<Integer>[] list;//?
+	static int N, M;
+	static int[] indegrees;
+	static ArrayList<Integer>[] infos;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-        arr = new int[n + 1];
-        list = new ArrayList[n + 1];
+		indegrees = new int[N + 1];
+		infos = new ArrayList[N + 1];
 
-        for(int i = 1; i<=n; i++){
-            list[i] = new ArrayList<>();
-        }
+		for (int i = 1; i <= N; i++) {
+			infos[i] = new ArrayList<>();
+		}
 
-        int before = 0;
-        int after = 0;
-        //초기
-        for(int i = 0; i < m; i++){
-            st = new StringTokenizer(br.readLine());
-            before = Integer.parseInt(st.nextToken());
-            after = Integer.parseInt(st.nextToken());
+		// a가 b보다 앞에 서야한다.
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			indegrees[b]++;
+			infos[a].add(b);
+		}
 
-            arr[after] = arr[after] + 1;
-            list[before].add(after);
-        }
+		//초기 값
+		Queue<Integer> q = new LinkedList<>();
+		for (int i = 1; i <= N; i++) {
+			if (indegrees[i] == 0) {
+				q.add(i);
+			}
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		while(!q.isEmpty()) {
+			int now = q.poll();
+			sb.append(now+" ");
+			for(int next : infos[now]) {
+				indegrees[next]--;
+				if(indegrees[next ] == 0) {
+					q.add(next);
+				}
+			}
+		}
+		System.out.println(sb);
+	}
 
-        //최초 탐색할 학생 찾기
-        Queue<Integer> q = new LinkedList<>();
-        for(int i = 1; i <=n; i++){
-            if(arr[i] == 0){
-                q.add(i);
-            }
-        }
-        
-        while(!q.isEmpty()){
-            int now = q.poll();
-            bw.write(now + " ");
-            
-            for(int i = 0; i < list[now].size(); i++){
-                int index = list[now].get(i);
-                if(index > 0){
-                    arr[index]--;
-                    if(arr[index] == 0){
-                        q.add(index);
-                    }
-                }
-            }
-        }
-
-        bw.flush();
-        bw.close();
-    }
 }
