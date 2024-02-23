@@ -40,7 +40,7 @@ class Solution {
         for(int next: nexts){
             List<Integer> temp = new LinkedList<>(nexts);
             temp.addAll(map[next]); //다음 경로 저장.
-            temp.remove(Integer.valueOf(next));//자신의 노드 제외
+            temp.remove(Integer.valueOf(next));//다음에 방문할 노드 제외
             
             //다음 노드가 양인 경우
             if(info[next] == 0){
