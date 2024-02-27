@@ -1,37 +1,35 @@
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int number;
-    static int[] result;
+	static int min = Integer.MAX_VALUE;
+	static int n;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        number = Integer.parseInt(br.readLine());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
 
-        if (number < 4) {
-            result = new int[4];
-        } else {
-            result = new int[number + 1];
-        }
-        result[2] = 1;
-        result[3] = 1;
+		n = sc.nextInt();
 
-        for (int i = 4; i <= number; i++) {
-            int cnt = Integer.MAX_VALUE;
-            if (i % 2 == 0) {
-                cnt = result[i / 2] ;  //2로 나누어 떨어지는 경우
-            }
-            if (i % 3 == 0) {
-                cnt = Math.min(cnt, result[i / 3]); //3으로 나누어 떨어지는 경우
-            }
-            cnt = Math.min(cnt, result[i - 1]); // -1을 하는 경우
-            result[i] = cnt + 1;
-        }
+		dfs(n, 0);
+		System.out.println(min);
 
-        System.out.println(result[number]);
-    }
+	}
+
+	private static void dfs(int num, int cnt) {
+		if (num == 1) {
+			min = Math.min(min, cnt);
+			return;
+		}
+
+		if (cnt >= min)
+			return;
+		
+		if (num % 3 == 0)
+			dfs(num / 3, cnt + 1);
+		if (num % 2 == 0)
+			dfs(num / 2, cnt + 1);
+
+		dfs(num - 1, cnt + 1);
+	}
+
 }
-
