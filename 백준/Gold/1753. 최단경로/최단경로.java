@@ -1,86 +1,80 @@
-
 import java.io.*;
 import java.util.*;
 
-//백준 1753, 최단경로 - 다익스트라 알고리즘
 public class Main {
-    static int v, e, k;
-    static List<info>[] map;
-    static int[] distanceArr; //기준이되는 노드에서 (인덱스의) 다른노드까지; 최소 거리를 저장하기 위한 배열
+	static int V, E;
+	static List<Info>[] map;
+	static int[] dist;
+	static int INF = Integer.MAX_VALUE;
+	static class Info implements Comparable<Info> {
+		int node;
+		int cost;
 
-    static class info implements Comparable<info> {
-        int node;
-        int distance;
-        public info(int node, int distance) {
-            this.node = node;
-            this.distance = distance;
-        }
+		public Info(int node, int cost) {
+			this.node = node;
+			this.cost = cost;
+		}
 
-        @Override
-        public int compareTo(info o) {
-            return Integer.compare(distance, o.distance);
-        }
-    }
+		@Override
+		public int compareTo(Info o) {
+			return Integer.compare(this.cost, o.cost);
+		}
+	}
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-        v = Integer.parseInt(st.nextToken());
-        e = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(br.readLine());
+		V = Integer.parseInt(st.nextToken());
+		E = Integer.parseInt(st.nextToken());
 
-        map = new ArrayList[v + 1];
-        distanceArr = new int[v + 1];
+		int start = Integer.parseInt(br.readLine());
 
-        //경로가 존재하지 않는 경우에는 INF를 출력하기 위한 값
-        Arrays.fill(distanceArr, Integer.MAX_VALUE);
+		dist = new int[V+1];
+		map = new ArrayList[V + 1];
+		for (int i = 1; i <= V; i++) {
+			map[i] = new ArrayList<>();
+		}
+		
+		for(int i = 0;  i < E; i++) {
+			st = new StringTokenizer(br.readLine());
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			int cost  = Integer.parseInt(st.nextToken());
+			map[from].add(new Info(to,cost));
+		}
+		
+		dijkstra(start);
+		StringBuilder sb = new StringBuilder();
+		for(int i = 1;  i<=V; i++) {
+			if(dist[i] == INF) {
+				sb.append("INF");
+			}else {
+				sb.append(dist[i]);				
+			}
+			sb.append("\n");
+		}
+		System.out.println(sb);
+	}
 
-        //map 초기화
-        for (int i = 1; i <= v; i++) {
-            map[i] = new ArrayList<info>();
-        }
-        // map에 u(출발) v(목표) w(가중치)저장.
-        int u, v, w;
-        for (int i = 1; i <= e; i++) {
-            st = new StringTokenizer(br.readLine());
-            u = Integer.parseInt(st.nextToken());
-            v = Integer.parseInt(st.nextToken());
-            w = Integer.parseInt(st.nextToken());
+	private static void dijkstra(int start) {
+		Arrays.fill(dist, INF);
+		dist[start] = 0;
+		
+		PriorityQueue<Info> pq = new PriorityQueue<>();
+		pq.add(new Info(start,0));
+		
+		while(!pq.isEmpty()) {
+			Info now = pq.poll();
+			if(now.cost > dist[now.node]) continue;
+			
+			for(Info next : map[now.node]) {
+				if(dist[next.node] > now.cost + next.cost) {
+					dist[next.node] = now.cost + next.cost;
+					pq.add(new Info(next.node, dist[next.node]));
+				}
+			}
+		}
+	}
 
-            map[u].add(new info(v, w));
-        }
-        findShortestPath(k);
-
-        for (int i = 1; i < distanceArr.length; i++){
-            if(distanceArr[i] == Integer.MAX_VALUE){
-                bw.write("INF\n");
-            }else {
-                bw.write(distanceArr[i]+"\n");
-            }
-        }
-
-        bw.flush();
-        bw.close();
-    }
-
-    private static void findShortestPath(int k) {
-        PriorityQueue<info> pq = new PriorityQueue<>();
-        distanceArr[k] = 0;
-        pq.add(new info(k,0));
-
-        while(pq.isEmpty() == false){
-            info now = pq.poll();
-            if(now.distance > distanceArr[now.node]){
-                continue;
-            }
-            for(info next: map[now.node]){
-                if(distanceArr[next.node] > distanceArr[now.node] + next.distance){
-                    distanceArr[next.node] = distanceArr[now.node] + next.distance;
-                    pq.add(new info(next.node, distanceArr[next.node]));
-                }
-            }
-        }
-    }
 }
