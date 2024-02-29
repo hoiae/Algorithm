@@ -1,132 +1,118 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N, M;
-    static int[][] map;
 
-    static class Point {
-        int x;
-        int y;
+	/**
+	 * 8 * 8 중에 3개를 고르는 방법? 50 * 64
+	 * 
+	 * 1. 빈칸의 좌표로 3개를 뽑는 조합. 8 7 6 / 6 = 56 2. 좌표를 막는다. 3. bfs를 한다. 56 * 64 4. 방문처리용
+	 * 배열visited와 map[][]을 사용해서 0의 개수를 센다.56 * 64 * 2 5. 0의 개수를 min에 계속 최신화한다.
+	 * 
+	 */
+	static int N, M;
+	static boolean[][] visited;
+	static int[][] map;
+	static int safe;
+	static List<Point> zeros;
+	static List<Point> virus;
+	static int cnt;// virus;
+	static int min;
 
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+	static class Point {
+		int x;
+		int y;
 
-    static int maxSafetyZone;
-    static int safetyZone;
-    static boolean[][] visited;
+		public Point(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+	public static void main(String[] args) throws IOException {
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-        map = new int[N][M];
-        List<Point> zeros = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
-            StringTokenizer st1 = new StringTokenizer(br.readLine());
-            for (int j = 0; j < M; j++) {
-                map[i][j] = Integer.parseInt(st1.nextToken());
-                if (map[i][j] == 0) {
-                    zeros.add(new Point(i, j));
-                }
-            }
-        }
+		map = new int[N][M];
+		zeros = new ArrayList<>();
+		virus = new ArrayList<>();
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < M; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				if (map[i][j] == 0) {
+					zeros.add(new Point(i, j));
+				}
+				if (map[i][j] == 2) {
+					virus.add(new Point(i, j));
+				}
+			}
+		}
 
-        //3가지 경우 선택
-        for (int i = 0; i < zeros.size(); i++) {
-            Point p1 = zeros.get(i);
-            for (int j = i + 1; j < zeros.size(); j++) {
-                Point p2 = zeros.get(j);
-                for (int k = j + 1; k < zeros.size(); k++) {
-                    Point p3 = zeros.get(k);
+		min = Integer.MAX_VALUE;
+		// 3중포문으로 0인 칸중 3개를 1로 막음
+		for (int i = 0; i < zeros.size(); i++) {
+			map[zeros.get(i).x][zeros.get(i).y] = 1;
+			for (int j = i + 1; j < zeros.size(); j++) {
+				map[zeros.get(j).x][zeros.get(j).y] = 1;
+				for (int k = j + 1; k < zeros.size(); k++) {
+					map[zeros.get(k).x][zeros.get(k).y] = 1;
+					solve();
+					map[zeros.get(k).x][zeros.get(k).y] = 0;
+				}
+				map[zeros.get(j).x][zeros.get(j).y] = 0;
+			}
+			map[zeros.get(i).x][zeros.get(i).y] = 0;
+		}
 
-                    buildAWall(p1);
-                    buildAWall(p2);
-                    buildAWall(p3);
+		System.out.println(zeros.size() - min - 3);
+	}
 
-                    //bfs를 통한 안전구역 확인
-                    checkSafetyZone();
+	private static void solve() {
+		visited = new boolean[N][M];
+		// 전이되는 바이러스의 개수를 셈. -> zeros.size()에서 값을 제외한 값을 최신화함.max에
+		cnt = 0;
+		for (Point start : virus) {
+			bfs(start);
+		}
 
-                    breakAWall(p1);
-                    breakAWall(p2);
-                    breakAWall(p3);
-                }
-            }
-        }
+		min = Math.min(min, cnt);
+		
+	}
 
-        System.out.println(maxSafetyZone);
-    }
+	private static void bfs(Point start) {
+		if (visited[start.x][start.y])
+			return;
+		Queue<Point> q = new LinkedList<>();
+		q.add(new Point(start.x, start.y));
+//		visited[start.x][start.y] = true;
 
-    private static void printMap() {
-        for(int t = 0;  t < N; t++){
-            for(int q = 0; q < M; q++){
-                System.out.print(map[t][q]+" ");
-            }
-            System.out.println();
-        }
-    }
+//		for(int i = 0;  i < N; i++) {
+//			for(int j = 0;  j < M; j++) {
+//				System.out.print(map[i][j]+" ");
+//			}
+//			System.out.println();
+//		}
+//		
+		int[] dx = { -1, 1, 0, 0 };
+		int[] dy = { 0, 0, -1, 1 };
+		while (!q.isEmpty()) {
+			Point now = q.poll();
+			for (int i = 0; i < 4; i++) {
+				int nx = now.x + dx[i];
+				int ny = now.y + dy[i];
 
-    private static void checkSafetyZone() {
-        safetyZone = 0;
-        visited = new boolean[N][M];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (map[i][j] == 0 && !visited[i][j]) {
-                    bfs(i, j);
-                }
-            }
-        }
-        maxSafetyZone = Math.max(safetyZone, maxSafetyZone);
+				if (nx < 0 || ny < 0 || nx >= N || ny >= M || map[nx][ny] != 0 || visited[nx][ny])
+					continue;
 
-    }
+				visited[nx][ny] = true;
+				cnt++;// 확산된 공간 카운팅
+				q.add(new Point(nx, ny));
+			}
+		}
+	}
 
-    private static void bfs(int x, int y) {
-        Queue<Point> q = new LinkedList<>();
-        visited[x][y] = true;
-        q.add(new Point(x, y));
-
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
-        int safetyZoneCnt = 1;
-        boolean isValid = true;
-        while (!q.isEmpty()) {
-            Point now = q.poll();
-            for (int i = 0; i < 4; i++) {
-                int nx = now.x + dx[i];
-                int ny = now.y + dy[i];
-                if (nx >= 0 && nx < N && ny >= 0 && ny < M && map[nx][ny] != 1 && !visited[nx][ny]) {
-                    if (map[nx][ny] == 2) {
-                        isValid = false;
-                    }
-                    visited[nx][ny] = true;
-                    safetyZoneCnt++;
-                    q.add(new Point(nx, ny));
-                }
-            }
-        }
-        if(isValid){
-            safetyZone += safetyZoneCnt;
-        }
-
-    }
-
-    private static void breakAWall(Point point) {
-        map[point.x][point.y] = 0;
-    }
-
-    private static void buildAWall(Point point) {
-        map[point.x][point.y] = 1;
-    }
 }
