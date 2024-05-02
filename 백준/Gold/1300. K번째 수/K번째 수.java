@@ -10,7 +10,7 @@ public class Main {
 		
 		
 		long left = 1;
-		long right = k;
+		long right = k + 1;
 		
 		while(left < right) {
 			long mid = (left + right)/2;
