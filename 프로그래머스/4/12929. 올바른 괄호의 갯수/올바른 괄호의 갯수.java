@@ -3,7 +3,6 @@ class Solution {
     static int n;
     static int cnt;
     public int solution(int n) {
-        //)는 앞에 있는 (의 개수를 초과할 수 없다.
         this.n = n;
         
         //깊이, 사용한 '('의 개수
@@ -13,11 +12,9 @@ class Solution {
     private static void dfs(int depth, int left, String str){
         if(depth == n * 2){
             //유효한지 판단
-            if(left <= n){
-                if(checkValid(str)){
+            if(checkValid(str)){
                     cnt++;
-                };   
-            }
+            };   
             return;
         }
         
