@@ -21,15 +21,14 @@ public class Main {
         
         //dp
         int[][] dp = new int[n + 1][k + 1];
-        for(int i = 1; i <= k; i++){//제한무게
-            for(int j = 1; j <= n; j++){//상품인덱스
-                if(weights[j] > i){
-                    dp[j][i] = dp[j - 1][i];
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= k; j++){
+                if(weights[i] > j){
+                    dp[i][j] = dp[i - 1][j];
                     continue;
                 }
                 
-                //가방에 담을 수 있는 경우
-                dp[j][i] = Math.max(dp[j - 1][i], values[j] + dp[j - 1][i - weights[j]]);
+                dp[i][j] = Math.max(dp[i-1][j], values[i] + dp[i-1][j-weights[i]]);
             }
         }
         System.out.println(dp[n][k]);
