@@ -5,10 +5,10 @@ class Solution {
         //set을 활용해 다른 원소의 개수를 파악한다.
         //슬라이딩 윈도우-개수가 다채워질 때 까지길이 늘림,
         //개수가 다 채워지면 길이 줄임
-        Set<String> set = new HashSet<>();
-        for(int i = 0; i < gems.length; i++){
-            set.add(gems[i]);
-        }
+        Set<String> set = new HashSet<>(Arrays.asList(gems));
+        // for(int i = 0; i < gems.length; i++){
+        //     set.add(gems[i]);
+        // }
         
         //구성하는 보석의 종류
         int diffCnt = set.size();
@@ -36,7 +36,6 @@ class Solution {
         
         int minSize = Integer.MAX_VALUE;
         while(left <= right && right < gems.length){
-            // System.out.println("left =" + left +", right="+right);
             if(set.size() >= diffCnt){
                 if(minSize > (right - left)){
 
