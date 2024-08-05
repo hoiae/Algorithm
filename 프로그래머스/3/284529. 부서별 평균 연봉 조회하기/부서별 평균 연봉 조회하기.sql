@@ -1,0 +1,16 @@
+# HR_DEPARTMENT로 마지막에 LEFT JOIN한다.
+# HR_EMPLOYESS에서 부서ID로 GROUP BY 후 AVG한다.
+
+SELECT
+    A.DEPT_ID,
+    A.DEPT_NAME_EN,
+    B.AVG_SAL AVG_SAL
+    FROM HR_DEPARTMENT A
+    JOIN 
+        (SELECT
+            DEPT_ID,
+            ROUND(AVG(sal)) AVG_SAL
+            FROM HR_EMPLOYEES
+            GROUP BY DEPT_ID) B
+        ON A.DEPT_ID = B.DEPT_ID
+    ORDER BY B.AVG_SAL DESC;
