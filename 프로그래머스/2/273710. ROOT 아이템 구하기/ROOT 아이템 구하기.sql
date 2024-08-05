@@ -1,0 +1,11 @@
+SELECT
+    A.ITEM_ID,
+    A.ITEM_NAME
+    FROM ITEM_INFO A
+    JOIN
+        (SELECT
+            ITEM_ID
+            FROM ITEM_TREE
+            WHERE PARENT_ITEM_ID IS NULL) B
+    ON A.ITEM_ID = B.ITEM_ID
+    ORDER BY A.ITEM_ID
