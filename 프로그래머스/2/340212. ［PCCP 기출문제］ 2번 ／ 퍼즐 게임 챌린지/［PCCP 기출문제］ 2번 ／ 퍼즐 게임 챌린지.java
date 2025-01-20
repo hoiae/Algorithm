@@ -49,6 +49,6 @@ class Solution {
             return -1; // -1를 return한 경우 인자인 level을 높여야한다. 낮추면 또 실패하기 때문
         }
         
-        return spend; //정상적으로 return된 경우 이므로 인자인 leve을 낮춘다.
+        return spend; //정상적으로 return된 경우 이므로 인자인 leve을 낮춘다..
     }
 }
