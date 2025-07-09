@@ -28,10 +28,7 @@ class Solution {
             return new int[]{-1};
         }
         
-        int[] answer = new int[days.size()];
-        for(int i = 0; i < days.size(); i++){
-            answer[i] = days.get(i);
-        }
+        int[] answer = days.stream().mapToInt(i -> i).toArray();
 
         return answer;
     }
