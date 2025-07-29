@@ -28,8 +28,6 @@ class Solution {
             }
         }
         
-        
-        
         return pq.size();
     }
 }
