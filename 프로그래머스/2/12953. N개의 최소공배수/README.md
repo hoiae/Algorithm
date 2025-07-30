@@ -1,10 +1,10 @@
 # [level 2] N개의 최소공배수 - 12953 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12953) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12953#qna) 
 
 ### 성능 요약
 
-메모리: 89.4 MB, 시간: 767.35 ms
+메모리: 87.9 MB, 시간: 0.04 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 07월 30일 15:41:44
+2025년 07월 30일 16:01:45
 
 ### 문제 설명
 

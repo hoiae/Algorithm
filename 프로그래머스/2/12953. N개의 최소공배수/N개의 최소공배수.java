@@ -1,24 +1,25 @@
 import java.util.*;
 class Solution {
     public int solution(int[] arr) {
-        Arrays.sort(arr);
         
-        int answer = 10000;
+        int lcm = arr[0];
         
-        for(int i = 100_000_000; i >= 1; i--){
-            if(check(i,arr)){
-                answer = i;
-            }
-        }
-        
-        return answer;
-    }
-    private boolean check(int lcm, int[] arr){
         for(int num : arr){
-            if(lcm % num != 0){
-                return false;
-            }
+            lcm = lcm(lcm, num);
         }
-        return true;
+        
+        return lcm;
+    }
+    private int lcm(int a, int b){
+       return  a * b / gcm(a,b);
+    }
+    
+    private int gcm(int a, int b){
+        while(b != 0){
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
     }
 }
