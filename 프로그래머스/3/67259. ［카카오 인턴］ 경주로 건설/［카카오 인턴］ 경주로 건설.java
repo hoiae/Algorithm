@@ -27,13 +27,11 @@ class Solution {
 
         for(int i = 0; i < 4; i++){
             pq.add(new int[]{sx,sy,i,0});
-            // visited[sx][sy][i] = 0;
         }
         
         int minPrice = Integer.MAX_VALUE;
         while(!pq.isEmpty()){
             int[] now = pq.poll();
-            // System.out.println("x="+now[0]+", y="+ now[1] + ", dir="+ now[2]+", cost="+now[3]);
             if(now[0] == n-1 && now[1] == n - 1){
                 minPrice = now[3];
                 break;
