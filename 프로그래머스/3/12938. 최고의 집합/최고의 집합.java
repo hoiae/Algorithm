@@ -1,6 +1,7 @@
 class Solution {
     public int[] solution(int n, int s) {
         int[] ans = new int[n];
+        
         if(n > s){
          return new int[]{-1};
         }
